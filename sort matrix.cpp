@@ -1,11 +1,20 @@
-#include <iostream>
-using namespace std;
+ #include <iostream>
 
+using std::cout;
+using std::cin;
 
-void bubbleSort(int arr[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
+bool ascending(int a, int b) {
+    return a > b;
+}
+
+bool descending(int a, int b) {
+    return a < b;
+}
+
+void BubbleSort(int* arr, int cols, bool (*comp)(int, int)) {
+    for (int i = 0; i < cols - 1; i++) {
+        for (int j = 0; j < cols - i - 1; j++) {
+            if (comp(arr[j], arr[j + 1])) {
                 int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
@@ -14,13 +23,68 @@ void bubbleSort(int arr[], int n) {
     }
 }
 
+void Merge(int* arr, int left, int mid, int right, bool (*comp)(int, int)) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
 
-void insertionSort(int arr[], int n) {
-    for (int i = 1; i < n; i++) {
+    int* leftArr = new int[n1];
+    int* rightArr = new int[n2];
+
+    for (int i = 0; i < n1; i++)
+        leftArr[i] = arr[left + i];
+    for (int j = 0; j < n2; j++)
+        rightArr[j] = arr[mid + 1 + j];
+
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        if (!comp(leftArr[i], rightArr[j])) {
+            arr[k] = leftArr[i];
+            i++;
+        }
+        else {
+            arr[k] = rightArr[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        arr[k] = leftArr[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        arr[k] = rightArr[j];
+        j++;
+        k++;
+    }
+
+    delete[] leftArr;
+    delete[] rightArr;
+}
+
+void MergeSortRecursive(int* arr, int left, int right, bool (*comp)(int, int)) {
+    if (left >= right) return;
+
+    int mid = left + (right - left) / 2;
+
+    MergeSortRecursive(arr, left, mid, comp);
+    MergeSortRecursive(arr, mid + 1, right, comp);
+
+    Merge(arr, left, mid, right, comp);
+}
+
+void MergeSort(int* arr, int size, bool (*comp)(int, int)) {
+    MergeSortRecursive(arr, 0, size - 1, comp);
+}
+
+void InsertionSort(int* arr, int cols, bool (*comp)(int, int)) {
+    for (int i = 1; i < cols; i++) {
         int key = arr[i];
         int j = i - 1;
 
-        while (j >= 0 && arr[j] > key) {
+        while (j >= 0 && comp(arr[j], key)) {
             arr[j + 1] = arr[j];
             j = j - 1;
         }
@@ -28,152 +92,151 @@ void insertionSort(int arr[], int n) {
     }
 }
 
+void FindMinMax(int* arr, int size, int& minVal, int& maxVal) {
+    minVal = arr[0];
+    maxVal = arr[0];
+    for (int i = 1; i < size; i++) {
+        if (arr[i] < minVal) minVal = arr[i];
+        if (arr[i] > maxVal) maxVal = arr[i];
+    }
+}
 
-void countingSort(int arr[], int n) {
-    if (n <= 0) return;
+void CountingSort(int* arr, int size, bool (*comp)(int, int)) {
+    if (size == 0) return;
 
-   
-    int max = arr[0], min = arr[0];
-    for (int i = 1; i < n; i++) {
-        if (arr[i] > max) max = arr[i];
-        if (arr[i] < min) min = arr[i];
+    int minVal, maxVal;
+    FindMinMax(arr, size, minVal, maxVal);
+
+    int range = maxVal - minVal + 1;
+    int* count = new int[range]();
+
+    for (int i = 0; i < size; i++) {
+        count[arr[i] - minVal]++;
     }
 
-    int range = max - min + 1;
-    int* count = new int[range](); 
-
-    
-    for (int i = 0; i < n; i++) {
-        count[arr[i] - min]++;
-    }
-
-   
     int index = 0;
-    for (int i = 0; i < range; i++) {
-        while (count[i] > 0) {
-            arr[index++] = i + min;
-            count[i]--;
+
+    if (comp == descending) {
+        for (int i = range - 1; i >= 0; i--) {
+            while (count[i] > 0) {
+                arr[index++] = i + minVal;
+                count[i]--;
+            }
+        }
+    }
+    else {
+        for (int i = 0; i < range; i++) {
+            while (count[i] > 0) {
+                arr[index++] = i + minVal;
+                count[i]--;
+            }
         }
     }
 
     delete[] count;
 }
 
-
-void matrixToArray(int** matrix, int rows, int cols, int arr[]) {
-    int index = 0;
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            arr[index++] = matrix[i][j];
-        }
-    }
-}
-
-
-void arrayToMatrix(int arr[], int** matrix, int rows, int cols) {
-    int index = 0;
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            matrix[i][j] = arr[index++];
-        }
-    }
-}
-
-
-void printMatrix(int** matrix, int rows, int cols) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            cout << matrix[i][j] << " ";
-        }
-        cout << endl;
-    }
-}
-
 int main() {
-    int rows, cols, choice;
+    char choose_sort, choose_comp;
+    bool (*comp)(int, int) = nullptr;
+    int lines, cols;
+    int** matrice;
 
-    cout << "Enter number of rows: ";
-    cin >> rows;
-    cout << "Enter number of cols: ";
+    cout << "Enter Number of Lines: ";
+    cin >> lines;
+    cout << '\n';
+    cout << "Enter Number of Columns: ";
     cin >> cols;
-
-    
-    int** matrix = new int* [rows];
-    for (int i = 0; i < rows; i++) {
-        matrix[i] = new int[cols];
+    cout << '\n';
+    matrice = new int* [lines];
+    for (int i = 0; i < lines; i++) {
+        matrice[i] = new int[cols];
     }
 
-    
-    cout << "Enter matrix elements:" << endl;
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            cout << "matrix[" << i << "][" << j << "] = ";
-            cin >> matrix[i][j];
+    cout << "Enter matrix elements: " << '\n';
+    for (int i = 0; i < lines; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            if (!(cin >> matrice[i][j])) {
+                cout << "wrong input!!!!";
+                for (int i = 0; i < lines; ++i) {
+                    delete[] matrice[i];
+                }
+                delete[] matrice;
+                std::exit(1);
+            }
         }
     }
 
-    cout << "\nOriginal matrix:" << endl;
-    printMatrix(matrix, rows, cols);
+    cout << "original matrix:" << '\n';
+    for (int i = 0; i < lines; i++) {
+        for (int j = 0; j < cols; j++) {
+            cout << matrice[i][j] << " ";
+        }
+        cout << '\n';
+	} 
 
-    cout << "\nChoose sorting method:" << endl;
-    cout << "1 - Bubble sort" << endl;
-    cout << "2 - Insertion sort" << endl;
-    cout << "3 - Counting sort" << endl;
-    cout << "Enter your choice (1-3): ";
-    cin >> choice;
+cout << "Choose sort type: Bubble sort - b, Merge sort - m, InsertionSort - i, Counting sort - c" << '\n';
+    cin >> choose_sort;
+    cout << "Choose comp type: ascending - '>', descending - '<'" << '\n';
+    cin >> choose_comp;
 
-   
-    int totalElements = rows * cols;
-    int* tempArray = new int[totalElements];
+    if (choose_comp == '>') {
+        comp = ascending;
+    }
+    else if (choose_comp == '<') {
+        comp = descending;
+    }
+    else {
+        cout << "Wrong input" << '\n';
+        std::exit(1);
+    }
 
-   
-    matrixToArray(matrix, rows, cols, tempArray);
-
-  
-    switch (choice) {
-    case 1:
-        bubbleSort(tempArray, totalElements);
-        cout << "\nMatrix sorted with Bubble Sort:" << endl;
+    switch (choose_sort) {
+    case 'b':
+        for (int i = 0; i < lines; ++i) {
+            BubbleSort(matrice[i], cols, comp);
+        }
         break;
-    case 2:
-        insertionSort(tempArray, totalElements);
-        cout << "\nMatrix sorted with Insertion Sort:" << endl;
+
+    case 'm':
+        for (int i = 0; i < lines; ++i) {
+            MergeSort(matrice[i], cols, comp);
+        }
         break;
-    case 3:
-        countingSort(tempArray, totalElements);
-        cout << "\nMatrix sorted with Counting Sort:" << endl;
+
+    case 'i':
+        for (int i = 0; i < lines; ++i) {
+            InsertionSort(matrice[i], cols, comp);
+        }
         break;
+
+    case 'c':
+        for (int i = 0; i < lines; ++i) {
+            CountingSort(matrice[i], cols, comp);
+        }
+        break;
+
     default:
-        cout << "Invalid choice!" << endl;
-        return 1;
+        cout << "Wrong input" << '\n';
+        for (int i = 0; i < lines; ++i) {
+            delete[] matrice[i];
+        }
+        delete[] matrice;
+        std::exit(1);
     }
 
-   
-    arrayToMatrix(tempArray, matrix, rows, cols);
-
-  
-    printMatrix(matrix, rows, cols);
-
-   
-    delete[] tempArray;
-    for (int i = 0; i < rows; i++) {
-        delete[] matrix[i];
+    cout << "sorted matrix:" << '\n';
+    for (int i = 0; i < lines; i++) {
+        for (int j = 0; j < cols; j++) {
+            cout << matrice[i][j] << " ";
+        }
+        cout << '\n';
     }
-    delete[] matrix;
+
+    for (int i = 0; i < lines; ++i) {
+        delete[] matrice[i];
+    }
+    delete[] matrice;
 
     return 0;
-	   
-
-
-
-
-
-
-
-
-
-
- 
 }
-
-

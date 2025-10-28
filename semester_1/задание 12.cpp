@@ -1,6 +1,6 @@
 #include <iostream>
-#include <cstdlib> 
-#include <ctime>   
+#include <cstdlib>
+#include <ctime>
 
 int sumAfterLastZero(int arr[], int size) {
     int lastZeroIndex = -1;
@@ -18,12 +18,10 @@ int sumAfterLastZero(int arr[], int size) {
     for (int i = lastZeroIndex + 1; i < size; i++) {
         sum += arr[i];
     }
-
     return sum;
 }
 
 void sortPositiveNegative(int arr[], int size) {
-    // Сортировка положительных элементов по возрастанию
     for (int i = 0; i < size - 1; i++) {
         for (int j = 0; j < size - i - 1; j++) {
             if (arr[j] > 0 && arr[j + 1] > 0 && arr[j] > arr[j + 1]) {
@@ -34,7 +32,6 @@ void sortPositiveNegative(int arr[], int size) {
         }
     }
 
-    // Сортировка отрицательных элементов по убыванию
     for (int i = 0; i < size - 1; i++) {
         for (int j = 0; j < size - i - 1; j++) {
             if (arr[j] < 0 && arr[j + 1] < 0 && arr[j] < arr[j + 1]) {
@@ -50,21 +47,18 @@ int main() {
     int n;
     const int max_size = 1000;
     int massive[max_size];
-
-    // Выбор способа заполнения
     int choice;
-    std::cout << "Choose input method:\n";
-    std::cout << "1 - Manual input\n";
-    std::cout << "2 - Random generation\n";
+
+    std::cout << "Choose input method:" << std::endl;
+    std::cout << "1 - Manual input" << std::endl;
+    std::cout << "2 - Random generation" << std::endl;
     std::cout << "Your choice: ";
     std::cin >> choice;
 
     if (choice == 1) {
-        // Ручной ввод
         std::cout << "Enter number of elements in array: ";
         std::cin >> n;
         
-        // Проверка на превышение максимального размера
         if (n > max_size || n <= 0) {
             std::cout << "Invalid array size!" << std::endl;
             return 1;
@@ -74,12 +68,11 @@ int main() {
         for (int i = 0; i < n; i++) {
             std::cin >> massive[i];
         }
-    } else if (choice == 2) {
-        // Случайная генерация
+    }
+    else if (choice == 2) {
         std::cout << "Enter number of elements in array: ";
         std::cin >> n;
         
-        // Проверка на превышение максимального размера
         if (n > max_size || n <= 0) {
             std::cout << "Invalid array size!" << std::endl;
             return 1;
@@ -87,22 +80,20 @@ int main() {
         
         srand(time(0));
         for (int i = 0; i < n; i++) {
-            // Генерируем числа от -10 до 10
-            massive[i] = rand() % 21 - 10; // от -10 до 10
+            massive[i] = rand() % 21 - 10;
         }
 
-        // Выводим сгенерированный массив
         std::cout << "Generated array: ";
         for (int i = 0; i < n; i++) {
             std::cout << massive[i] << " ";
         }
         std::cout << std::endl;
-    } else {
+    }
+    else {
         std::cout << "Invalid choice!" << std::endl;
         return 1;
     }
 
-    // Подсчет положительных элементов
     int count = 0;
     for (int i = 0; i < n; i++) {
         if (massive[i] > 0) {
@@ -111,14 +102,11 @@ int main() {
     }
     std::cout << "Number of positive elements: " << count << std::endl;
 
-    // Сумма после последнего нуля
     int result = sumAfterLastZero(massive, n);
     std::cout << "Sum of elements after last zero: " << result << std::endl;
 
-    // Сортировка положительных и отрицательных элементов
     sortPositiveNegative(massive, n);
 
-    // Вывод отсортированного массива
     std::cout << "Sorted array (positive ascending, negative descending): ";
     for (int i = 0; i < n; i++) {
         std::cout << massive[i] << " ";
@@ -127,4 +115,3 @@ int main() {
 
     return 0;
 }
-

@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <cstdlib> 
 #include <ctime>   
 
@@ -22,174 +22,94 @@ int sumAfterLastZero(int arr[], int size) {
     return sum;
 }
 
-int main()
-{
-    int i, n, j;
+void sortPositiveNegative(int arr[], int size) {
+    // Сортировка положительных элементов по возрастанию (пузырьковая сортировка только для положительных)
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (arr[j] > 0 && arr[j + 1] > 0 && arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+
+    // Сортировка отрицательных элементов по убыванию (пузырьковая сортировка только для отрицательных)
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (arr[j] < 0 && arr[j + 1] < 0 && arr[j] < arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+int main() {
+    int n;
     const int max_size = 1000;
     int massive[max_size];
 
-    // Часть с ручным вводом
-    std::cout << "Enter number element massive:";
-    std::cin >> n;
-    for (int i = 0; i < n; i++)
-    {
-        std::cin >> massive[i];
+    // Выбор способа заполнения
+    int choice;
+    std::cout << "Choose input method:\n";
+    std::cout << "1 - Manual input\n";
+    std::cout << "2 - Random generation\n";
+    std::cout << "Your choice: ";
+    std::cin >> choice;
+
+    if (choice == 1) {
+        // Ручной ввод
+        std::cout << "Enter number of elements in array: ";
+        std::cin >> n;
+        
+        std::cout << "Enter " << n << " elements: ";
+        for (int i = 0; i < n; i++) {
+            std::cin >> massive[i];
+        }
+    } else if (choice == 2) {
+        // Случайная генерация
+        std::cout << "Enter number of elements in array: ";
+        std::cin >> n;
+        
+        srand(time(0));
+        for (int i = 0; i < n; i++) {
+            // Генерируем числа от -10 до 10
+            massive[i] = rand() % 21 - 10; // от -10 до 10
+        }
+
+        // Выводим сгенерированный массив
+        std::cout << "Generated array: ";
+        for (int i = 0; i < n; i++) {
+            std::cout << massive[i] << " ";
+        }
+        std::cout << std::endl;
+    } else {
+        std::cout << "Invalid choice!" << std::endl;
+        return 1;
     }
 
+    // Подсчет положительных элементов
     int count = 0;
-    for (int i = 0; i < n; i++)
-    {
-        if (massive[i] > 0)
-        {
+    for (int i = 0; i < n; i++) {
+        if (massive[i] > 0) {
             count++;
         }
     }
     std::cout << "Number of positive elements: " << count << std::endl;
 
+    // Сумма после последнего нуля
     int result = sumAfterLastZero(massive, n);
     std::cout << "Sum of elements after last zero: " << result << std::endl;
 
-    int positive_positions[max_size], negative_positions[max_size];
-    int pos_values[max_size], neg_values[max_size];
-    int pos_count = 0, neg_count = 0;
+    // Сортировка положительных и отрицательных элементов (без дополнительных массивов)
+    sortPositiveNegative(massive, n);
 
-    // Запоминаем позиции и значения
+    // Вывод отсортированного массива
+    std::cout << "Sorted array (positive ascending, negative descending): ";
     for (int i = 0; i < n; i++) {
-        if (massive[i] > 0) {
-            positive_positions[pos_count] = i;
-            pos_values[pos_count] = massive[i];
-            pos_count++;
-        }
-        else if (massive[i] < 0) {
-            negative_positions[neg_count] = i;
-            neg_values[neg_count] = massive[i];
-            neg_count++;
-        }
-    }
-
-    // Сортируем положительные значения по возрастанию
-    for (int i = 0; i < pos_count - 1; i++) {
-        for (int j = 0; j < pos_count - i - 1; j++) {
-            if (pos_values[j] > pos_values[j + 1]) {
-                int temp = pos_values[j];
-                pos_values[j] = pos_values[j + 1];
-                pos_values[j + 1] = temp;
-            }
-        }
-    }
-
-    // Сортируем отрицательные значения по убыванию
-    for (int i = 0; i < neg_count - 1; i++) {
-        for (int j = 0; j < neg_count - i - 1; j++) {
-            if (neg_values[j] < neg_values[j + 1]) {
-                int temp = neg_values[j];
-                neg_values[j] = neg_values[j + 1];
-                neg_values[j + 1] = temp;
-            }
-        }
-    }
-
-    // Вставляем отсортированные значения обратно на их позиции
-    for (int i = 0; i < pos_count; i++) {
-        massive[positive_positions[i]] = pos_values[i];
-    }
-    for (int i = 0; i < neg_count; i++) {
-        massive[negative_positions[i]] = neg_values[i];
-    }
-
-    std::cout << "All Elements: ";
-    for (int j = 0; j < n; j++) {
-        std::cout << massive[j] << " ";
-    }
-    std::cout << std::endl;
-
-    //--------------------------------------------------------------------------------------часть с рандомными числами
-    int k;
-    int massive_rand[max_size]; 
-    std::cout << "Enter number element massive for random:";
-    std::cin >> k;
-
-    srand(time(0));
-    for (int i = 0; i < k; i++)
-    {
-        // Генерируем числа от -10 до 10 с нулями
-        int random_num = rand() % 21 - 10; // от -10 до 10
-        // С вероятностью 10% делаем ноль
-        if (rand() % 1 == 0) {
-            massive_rand[i] = 0;
-        }
-        else {
-            massive_rand[i] = random_num;
-        }
-    }
-
-    // Выводим сгенерированный массив
-    std::cout << "Generated array: ";
-    for (int i = 0; i < k; i++) {
-        std::cout << massive_rand[i] << " ";
-    }
-    std::cout << std::endl;
-
-    int count_rand = 0;
-    for (int i = 0; i < k; i++)
-    {
-        if (massive_rand[i] > 0)
-        {
-            count_rand++;
-        }
-    }
-    std::cout << "Number of positive elements: " << count_rand << std::endl;
-
-    int result_rand = sumAfterLastZero(massive_rand, k);
-    std::cout << "Sum of elements after last zero: " << result_rand << std::endl;
-
-    int positive_positions_rand[max_size], negative_positions_rand[max_size];
-    int pos_values_rand[max_size], neg_values_rand[max_size];
-    int pos_count_rand = 0, neg_count_rand = 0;
-
-    for (int i = 0; i < k; i++) {
-        if (massive_rand[i] > 0) {
-            positive_positions_rand[pos_count_rand] = i;
-            pos_values_rand[pos_count_rand] = massive_rand[i];
-            pos_count_rand++;
-        }
-        else if (massive_rand[i] < 0) {
-            negative_positions_rand[neg_count_rand] = i;
-            neg_values_rand[neg_count_rand] = massive_rand[i];
-            neg_count_rand++;
-        }
-    }
-
-    for (int i = 0; i < pos_count_rand - 1; i++) {
-        for (int j = 0; j < pos_count_rand - i - 1; j++) {
-            if (pos_values_rand[j] > pos_values_rand[j + 1]) {
-                int temp = pos_values_rand[j];
-                pos_values_rand[j] = pos_values_rand[j + 1];
-                pos_values_rand[j + 1] = temp;
-            }
-        }
-    }
-
-    for (int i = 0; i < neg_count_rand - 1; i++) {
-        for (int j = 0; j < neg_count_rand - i - 1; j++) {
-            if (neg_values_rand[j] < neg_values_rand[j + 1]) {
-                int temp = neg_values_rand[j];
-                neg_values_rand[j] = neg_values_rand[j + 1];
-                neg_values_rand[j + 1] = temp;
-            }
-        }
-    }
-
-    for (int i = 0; i < pos_count_rand; i++) {
-        massive_rand[positive_positions_rand[i]] = pos_values_rand[i];
-    }
-    for (int i = 0; i < neg_count_rand; i++) {
-        massive_rand[negative_positions_rand[i]] = neg_values_rand[i];
-    }
-
-    std::cout << "All Elements random: ";
-    for (int j = 0; j < k; j++) {
-        std::cout << massive_rand[j] << " ";
+        std::cout << massive[i] << " ";
     }
     std::cout << std::endl;
 

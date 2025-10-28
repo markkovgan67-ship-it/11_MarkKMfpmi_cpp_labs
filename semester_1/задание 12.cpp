@@ -46,28 +46,28 @@ void processArray(int massive[], int n) {
         std::cout << "No zero elements found" << std::endl;
     }
 
-    // 3. Преобразование массива - элементы с ИНДЕКСАМИ кратными 3 сначала, потом остальные
+    // 3. Преобразование массива - элементы кратные 3 сначала, потом остальные
     int new_massive[1000];
     int new_index = 0;
 
-    // Сначала добавляем элементы с индексами кратными 3 (0, 3, 6, 9, ...)
+    // Сначала добавляем элементы, кратные 3 (по значению)
     for (int i = 0; i < n; i++) {
-        if (i % 3 == 0) {  // индексы, кратные 3
+        if (massive[i] % 3 == 0 && massive[i] != 0) {  // значения, кратные 3 (исключаем 0)
             new_massive[new_index] = massive[i];
             new_index++;
         }
     }
 
-    // Затем добавляем все остальные элементы (индексы не кратные 3)
+    // Затем добавляем все остальные элементы
     for (int i = 0; i < n; i++) {
-        if (i % 3 != 0) {  // индексы, не кратные 3
+        if (massive[i] % 3 != 0 || massive[i] == 0) {  // значения, не кратные 3, включая 0
             new_massive[new_index] = massive[i];
             new_index++;
         }
     }
 
     // Вывод преобразованного массива
-    std::cout << "Transformed array (indices multiple of 3 first): ";
+    std::cout << "Transformed array (multiples of 3 first): ";
     for (int i = 0; i < n; i++) {
         std::cout << new_massive[i] << " ";
     }
@@ -75,18 +75,18 @@ void processArray(int massive[], int n) {
 
     // Объяснение преобразования
     std::cout << "Explanation: " << std::endl;
-    std::cout << "Indices multiple of 3: ";
+    std::cout << "Multiples of 3: ";
     for (int i = 0; i < n; i++) {
-        if (i % 3 == 0) {
-            std::cout << "massive[" << i << "]=" << massive[i] << " ";
+        if (massive[i] % 3 == 0 && massive[i] != 0) {
+            std::cout << massive[i] << " ";
         }
     }
     std::cout << std::endl;
     
-    std::cout << "Other indices: ";
+    std::cout << "Other numbers: ";
     for (int i = 0; i < n; i++) {
-        if (i % 3 != 0) {
-            std::cout << "massive[" << i << "]=" << massive[i] << " ";
+        if (massive[i] % 3 != 0 || massive[i] == 0) {
+            std::cout << massive[i] << " ";
         }
     }
     std::cout << std::endl;

@@ -7,21 +7,21 @@
 
 using namespace std;
 
-// Функция для вычисления модуля
+// функция модуля
 int my_abs(int x) {
     if (x < 0) return -x;
     return x;
 }
 
 void processArray(int* massive, int n) {
-    // Вывод исходного массива
+    // функция объявления массива
     cout << "Original array: ";
     for (int i = 0; i < n; i++) {
         cout << massive[i] << " ";
     }
     cout << endl;
 
-    // 1. Минимальный по модулю элемент
+    // Нахождение минимального элемента по модулю
     int min_abs = my_abs(massive[0]);
     int min_index = 0;
     for (int i = 1; i < n; i++) {
@@ -33,7 +33,7 @@ void processArray(int* massive, int n) {
     }
     cout << "Min absolute element: " << massive[min_index] << " at index " << min_index << endl;
 
-    // 2. Сумма элементов до последнего нулевого элемента
+    // Сумма и нахождение элементов до последнего 0
     int last_zero_index = -1;
     for (int i = 0; i < n; i++) {
         if (massive[i] == 0) {
@@ -51,13 +51,13 @@ void processArray(int* massive, int n) {
         cout << "No zero elements found" << endl;
     }
 
-    // 3. Преобразование массива - элементы кратные 3 сначала, потом остальные
-    // ДИНАМИЧЕСКИЙ массив для результата
+    // сортировка массива по числам кратным 3 сначала
+    // объявление динамичесвкого массива
     int* new_massive = new int[n];
 
     int new_index = 0;
 
-    // Сначала добавляем элементы, кратные 3
+    // добавленеи элеменетов кратных 3
     for (int i = 0; i < n; i++) {
         if (massive[i] % 3 == 0 && massive[i] != 0) {
             new_massive[new_index] = massive[i];
@@ -65,7 +65,7 @@ void processArray(int* massive, int n) {
         }
     }
 
-    // Затем добавляем все остальные элементы
+    //добавленеи оставшихся элементов
     for (int i = 0; i < n; i++) {
         if (massive[i] % 3 != 0 || massive[i] == 0) {
             new_massive[new_index] = massive[i];
@@ -73,14 +73,14 @@ void processArray(int* massive, int n) {
         }
     }
 
-    // Вывод преобразованного массива
+    // вывод преобразованного массива
     cout << "Transformed array (multiples of 3 first): ";
     for (int i = 0; i < n; i++) {
         cout << new_massive[i] << " ";
     }
     cout << endl;
 
-    // ОСВОБОЖДЕНИЕ динамической памяти
+    // освобожденеи динамической памяти
     delete[] new_massive;
 }
 
@@ -104,11 +104,11 @@ int main() {
         return 1;
     }
 
-    // ДИНАМИЧЕСКОЕ выделение памяти для основного массива
+    // динамическое выделение памяти под освновной масиив
     int* massive = new int[n];
-
+//-----------------------------------------------------------------------------------------------рандомный выбор
     if (choice == 1) {
-        // Рандомное заполнение массива
+       
         srand(time(0));
         for (int i = 0; i < n; i++) {
             massive[i] = rand() % 21 - 10; // числа от -10 до 10
@@ -128,7 +128,7 @@ int main() {
         }
     } else {
         cout << "Invalid choice!" << endl;
-        delete[] massive; // Освобождение памяти при ошибке
+        delete[] massive; // освобождение при ошибке
         return 1;
     }
 

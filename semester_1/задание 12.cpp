@@ -75,15 +75,12 @@ void processArray(int massive[], int n) {
 
     // Объяснение преобразования
     std::cout << "Explanation: " << std::endl;
-    std::cout << "Multiples of 3: ";
+    std::cout << "Answer: ";
     for (int i = 0; i < n; i++) {
         if (massive[i] % 3 == 0 && massive[i] != 0) {
             std::cout << massive[i] << " ";
         }
-    }
-    std::cout << std::endl;
-    
-    std::cout << "Other numbers: ";
+    }  
     for (int i = 0; i < n; i++) {
         if (massive[i] % 3 != 0 || massive[i] == 0) {
             std::cout << massive[i] << " ";

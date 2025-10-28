@@ -46,30 +46,48 @@ void processArray(int massive[], int n) {
         std::cout << "No zero elements found" << std::endl;
     }
 
-    // 3. Преобразование массива - элементы с индексами кратными 3 сначала
+    // 3. Преобразование массива - элементы с ИНДЕКСАМИ кратными 3 сначала, потом остальные
     int new_massive[1000];
     int new_index = 0;
 
-    // Сначала добавляем элементы с индексами кратными 3
+    // Сначала добавляем элементы с индексами кратными 3 (0, 3, 6, 9, ...)
     for (int i = 0; i < n; i++) {
-        if (i % 3 == 0) {
+        if (i % 3 == 0) {  // индексы, кратные 3
             new_massive[new_index] = massive[i];
             new_index++;
         }
     }
 
-    // Затем добавляем остальные элементы
+    // Затем добавляем все остальные элементы (индексы не кратные 3)
     for (int i = 0; i < n; i++) {
-        if (i % 3 != 0) {
+        if (i % 3 != 0) {  // индексы, не кратные 3
             new_massive[new_index] = massive[i];
             new_index++;
         }
     }
 
     // Вывод преобразованного массива
-    std::cout << "Transformed array: ";
+    std::cout << "Transformed array (indices multiple of 3 first): ";
     for (int i = 0; i < n; i++) {
         std::cout << new_massive[i] << " ";
+    }
+    std::cout << std::endl;
+
+    // Объяснение преобразования
+    std::cout << "Explanation: " << std::endl;
+    std::cout << "Indices multiple of 3: ";
+    for (int i = 0; i < n; i++) {
+        if (i % 3 == 0) {
+            std::cout << "massive[" << i << "]=" << massive[i] << " ";
+        }
+    }
+    std::cout << std::endl;
+    
+    std::cout << "Other indices: ";
+    for (int i = 0; i < n; i++) {
+        if (i % 3 != 0) {
+            std::cout << "massive[" << i << "]=" << massive[i] << " ";
+        }
     }
     std::cout << std::endl;
 }

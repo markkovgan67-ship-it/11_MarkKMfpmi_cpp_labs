@@ -111,31 +111,31 @@ int main() {
        
         srand(time(0));
         for (int i = 0; i < n; i++) {
-            massive[i] = rand() % 21 - 10; // числа от -10 до 10
+            massive[i] = rand() % 21 - 10; // 
         }
         
-        // Вывод сгенерированного массива
+        
         cout << "Generated array: ";
         for (int i = 0; i < n; i++) {
             cout << massive[i] << " ";
         }
         cout << endl;
     } else if (choice == 2) {
-        // Ручной ввод
+       
         cout << "Enter " << n << " elements:" << endl;
         for (int i = 0; i < n; i++) {
             cin >> massive[i];
         }
     } else {
         cout << "Invalid choice!" << endl;
-        delete[] massive; // освобождение при ошибке
+        delete[] massive; 
         return 1;
     }
 
-    // Обработка массива
+    
     processArray(massive, n);
 
-    // ОСВОБОЖДЕНИЕ динамической памяти
+   
     delete[] massive;
 
     return 0;

@@ -23,7 +23,7 @@ int sumAfterLastZero(int arr[], int size) {
 }
 
 void sortPositiveNegative(int arr[], int size) {
-    // Сортировка положительных элементов по возрастанию (пузырьковая сортировка только для положительных)
+    // Сортировка положительных элементов по возрастанию
     for (int i = 0; i < size - 1; i++) {
         for (int j = 0; j < size - i - 1; j++) {
             if (arr[j] > 0 && arr[j + 1] > 0 && arr[j] > arr[j + 1]) {
@@ -34,7 +34,7 @@ void sortPositiveNegative(int arr[], int size) {
         }
     }
 
-    // Сортировка отрицательных элементов по убыванию (пузырьковая сортировка только для отрицательных)
+    // Сортировка отрицательных элементов по убыванию
     for (int i = 0; i < size - 1; i++) {
         for (int j = 0; j < size - i - 1; j++) {
             if (arr[j] < 0 && arr[j + 1] < 0 && arr[j] < arr[j + 1]) {
@@ -64,6 +64,12 @@ int main() {
         std::cout << "Enter number of elements in array: ";
         std::cin >> n;
         
+        // Проверка на превышение максимального размера
+        if (n > max_size || n <= 0) {
+            std::cout << "Invalid array size!" << std::endl;
+            return 1;
+        }
+        
         std::cout << "Enter " << n << " elements: ";
         for (int i = 0; i < n; i++) {
             std::cin >> massive[i];
@@ -72,6 +78,12 @@ int main() {
         // Случайная генерация
         std::cout << "Enter number of elements in array: ";
         std::cin >> n;
+        
+        // Проверка на превышение максимального размера
+        if (n > max_size || n <= 0) {
+            std::cout << "Invalid array size!" << std::endl;
+            return 1;
+        }
         
         srand(time(0));
         for (int i = 0; i < n; i++) {
@@ -103,7 +115,7 @@ int main() {
     int result = sumAfterLastZero(massive, n);
     std::cout << "Sum of elements after last zero: " << result << std::endl;
 
-    // Сортировка положительных и отрицательных элементов (без дополнительных массивов)
+    // Сортировка положительных и отрицательных элементов
     sortPositiveNegative(massive, n);
 
     // Вывод отсортированного массива
@@ -115,3 +127,4 @@ int main() {
 
     return 0;
 }
+

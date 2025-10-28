@@ -2,45 +2,76 @@
 #include <cstdlib>
 #include <ctime>
 
-int sumAfterLastZero(int arr[], int size) {
-    int lastZeroIndex = -1;
-    for (int i = 0; i < size; i++) {
-        if (arr[i] == 0) {
-            lastZeroIndex = i;
-        }
-    }
-
-    if (lastZeroIndex == -1 || lastZeroIndex == size - 1) {
-        return 0;
-    }
-
-    int sum = 0;
-    for (int i = lastZeroIndex + 1; i < size; i++) {
-        sum += arr[i];
-    }
-    return sum;
+// Функция для вычисления модуля
+int my_abs(int x) {
+    return (x < 0) ? -x : x;
 }
 
-void sortPositiveNegative(int arr[], int size) {
-    for (int i = 0; i < size - 1; i++) {
-        for (int j = 0; j < size - i - 1; j++) {
-            if (arr[j] > 0 && arr[j + 1] > 0 && arr[j] > arr[j + 1]) {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
+void processArray(int massive[], int n) {
+    // Вывод исходного массива
+    std::cout << "Original array: ";
+    for (int i = 0; i < n; i++) {
+        std::cout << massive[i] << " ";
+    }
+    std::cout << std::endl;
+
+    // 1. Минимальный по модулю элемент
+    int min_abs = my_abs(massive[0]);
+    int min_index = 0;
+    for (int i = 1; i < n; i++) {
+        int current_abs = my_abs(massive[i]);
+        if (current_abs < min_abs) {
+            min_abs = current_abs;
+            min_index = i;
+        }
+    }
+    std::cout << "Min absolute element: " << massive[min_index] << " at index " << min_index << std::endl;
+
+    // 2. Сумма элементов до последнего нулевого элемента
+    int last_zero_index = -1;
+    for (int i = 0; i < n; i++) {
+        if (massive[i] == 0) {
+            last_zero_index = i;
         }
     }
 
-    for (int i = 0; i < size - 1; i++) {
-        for (int j = 0; j < size - i - 1; j++) {
-            if (arr[j] < 0 && arr[j + 1] < 0 && arr[j] < arr[j + 1]) {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
+    int sum_before_zero = 0;
+    if (last_zero_index != -1) {
+        for (int i = 0; i < last_zero_index; i++) {
+            sum_before_zero += massive[i];
+        }
+        std::cout << "Sum before last zero: " << sum_before_zero << std::endl;
+    }
+    else {
+        std::cout << "No zero elements found" << std::endl;
+    }
+
+    // 3. Преобразование массива - элементы с индексами кратными 3 сначала
+    int new_massive[1000];
+    int new_index = 0;
+
+    // Сначала добавляем элементы с индексами кратными 3
+    for (int i = 0; i < n; i++) {
+        if (i % 3 == 0) {
+            new_massive[new_index] = massive[i];
+            new_index++;
         }
     }
+
+    // Затем добавляем остальные элементы
+    for (int i = 0; i < n; i++) {
+        if (i % 3 != 0) {
+            new_massive[new_index] = massive[i];
+            new_index++;
+        }
+    }
+
+    // Вывод преобразованного массива
+    std::cout << "Transformed array: ";
+    for (int i = 0; i < n; i++) {
+        std::cout << new_massive[i] << " ";
+    }
+    std::cout << std::endl;
 }
 
 int main() {
@@ -49,69 +80,43 @@ int main() {
     int massive[max_size];
     int choice;
 
+    // Выбор способа ввода
     std::cout << "Choose input method:" << std::endl;
-    std::cout << "1 - Manual input" << std::endl;
-    std::cout << "2 - Random generation" << std::endl;
+    std::cout << "1 - Random generation" << std::endl;
+    std::cout << "2 - Manual input" << std::endl;
     std::cout << "Your choice: ";
     std::cin >> choice;
 
+    // Ввод размера массива
+    std::cout << "Enter number of elements: ";
+    std::cin >> n;
+
+    if (n <= 0 || n > max_size) {
+        std::cout << "Invalid size!" << std::endl;
+        return 1;
+    }
+
     if (choice == 1) {
-        std::cout << "Enter number of elements in array: ";
-        std::cin >> n;
-        
-        if (n > max_size || n <= 0) {
-            std::cout << "Invalid array size!" << std::endl;
-            return 1;
-        }
-        
-        std::cout << "Enter " << n << " elements: ";
+        // Рандомное заполнение массива
+        srand(time(0));
         for (int i = 0; i < n; i++) {
-            std::cin >> massive[i];
+            massive[i] = rand() % 21 - 10; // числа от -10 до 10
         }
     }
     else if (choice == 2) {
-        std::cout << "Enter number of elements in array: ";
-        std::cin >> n;
-        
-        if (n > max_size || n <= 0) {
-            std::cout << "Invalid array size!" << std::endl;
-            return 1;
-        }
-        
-        srand(time(0));
+        // Ручной ввод
+        std::cout << "Enter " << n << " elements:" << std::endl;
         for (int i = 0; i < n; i++) {
-            massive[i] = rand() % 21 - 10;
+            std::cin >> massive[i];
         }
-
-        std::cout << "Generated array: ";
-        for (int i = 0; i < n; i++) {
-            std::cout << massive[i] << " ";
-        }
-        std::cout << std::endl;
     }
     else {
         std::cout << "Invalid choice!" << std::endl;
         return 1;
     }
 
-    int count = 0;
-    for (int i = 0; i < n; i++) {
-        if (massive[i] > 0) {
-            count++;
-        }
-    }
-    std::cout << "Number of positive elements: " << count << std::endl;
-
-    int result = sumAfterLastZero(massive, n);
-    std::cout << "Sum of elements after last zero: " << result << std::endl;
-
-    sortPositiveNegative(massive, n);
-
-    std::cout << "Sorted array (positive ascending, negative descending): ";
-    for (int i = 0; i < n; i++) {
-        std::cout << massive[i] << " ";
-    }
-    std::cout << std::endl;
+    // Обработка массива
+    processArray(massive, n);
 
     return 0;
 }

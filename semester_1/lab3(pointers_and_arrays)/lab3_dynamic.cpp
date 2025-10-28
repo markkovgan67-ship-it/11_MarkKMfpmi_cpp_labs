@@ -1,7 +1,7 @@
 
 // solve task with usage of
 // dymanic arrays
-#include <iostream>
+ #include <iostream>
 #include <cstdlib>
 #include <ctime>
 
@@ -13,7 +13,7 @@ int my_abs(int x) {
     return x;
 }
 
-void processArray(int massive[], int n) {
+void processArray(int* massive, int n) {
     // Вывод исходного массива
     cout << "Original array: ";
     for (int i = 0; i < n; i++) {
@@ -52,7 +52,9 @@ void processArray(int massive[], int n) {
     }
 
     // 3. Преобразование массива - элементы кратные 3 сначала, потом остальные
-    int new_massive[1000];
+    // ДИНАМИЧЕСКИЙ массив для результата
+    int* new_massive = new int[n];
+
     int new_index = 0;
 
     // Сначала добавляем элементы, кратные 3
@@ -77,11 +79,13 @@ void processArray(int massive[], int n) {
         cout << new_massive[i] << " ";
     }
     cout << endl;
+
+    // ОСВОБОЖДЕНИЕ динамической памяти
+    delete[] new_massive;
 }
 
 int main() {
     int n;
-    int massive[1000];
     int choice;
 
     // Выбор способа ввода
@@ -95,10 +99,13 @@ int main() {
     cout << "Enter number of elements: ";
     cin >> n;
 
-    if (n <= 0 || n > 1000) {
-        cout << "Invalid size! Size should be between 1 and 1000" << endl;
+    if (n <= 0) {
+        cout << "Invalid size! Size should be greater than 0" << endl;
         return 1;
     }
+
+    // ДИНАМИЧЕСКОЕ выделение памяти для основного массива
+    int* massive = new int[n];
 
     if (choice == 1) {
         // Рандомное заполнение массива
@@ -121,13 +128,15 @@ int main() {
         }
     } else {
         cout << "Invalid choice!" << endl;
+        delete[] massive; // Освобождение памяти при ошибке
         return 1;
     }
 
     // Обработка массива
     processArray(massive, n);
 
-    return 0;
-}
+    // ОСВОБОЖДЕНИЕ динамической памяти
+    delete[] massive;
 
-    
+    return 0;
+}   

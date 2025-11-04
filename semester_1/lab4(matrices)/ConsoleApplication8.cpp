@@ -4,8 +4,6 @@
 
 int main() {
     int n, m;
-    std::cout << "Enter number rows and cols: ";
-    std::cin >> n >> m;
     int a[100][100];
 
     // Выбор способа заполнения матрицы
@@ -18,10 +16,12 @@ int main() {
 
     if (choice == 1) {
         // Случайное заполнение
+        std::cout << "Enter number rows and cols: ";
+        std::cin >> n >> m;
         int min_val, max_val;
         std::cout << "Enter min and max values for random: ";
         std::cin >> min_val >> max_val;
-        
+
         std::srand(std::time(0));
         std::cout << "Random matrix " << n << "x" << m << ":" << std::endl;
         for (int i = 0; i < n; i++) {
@@ -31,13 +31,18 @@ int main() {
             }
             std::cout << std::endl;
         }
-    } else if (choice == 2) {
+    }
+    else if (choice == 2) {
         // Ручной ввод
+        
+         std::cout << "Enter number rows and cols: ";
+         std::cin >> n >> m;
         std::cout << "Enter elements matrix: " << n << "x" << m << ":" << std::endl;
         for (int i = 0; i < n; i++)
             for (int j = 0; j < m; j++)
                 std::cin >> a[i][j];
-    } else {
+    }
+    else {
         std::cout << "Invalid choice! Using manual input by default." << std::endl;
         std::cout << "Enter elements matrix: " << n << "x" << m << ":" << std::endl;
         for (int i = 0; i < n; i++)
@@ -65,7 +70,8 @@ int main() {
         for (int j = 1; j < m; j++) {
             if (a[i][j] == a[i][j - 1]) {
                 curr_len++;
-            } else {
+            }
+            else {
                 if (curr_len > max_len) {
                     max_len = curr_len;
                     max_row = i;
@@ -73,7 +79,7 @@ int main() {
                 curr_len = 1;
             }
         }
-        
+
         if (curr_len > max_len) {
             max_len = curr_len;
             max_row = i;
@@ -86,7 +92,7 @@ int main() {
     //--------------------------------------------------------------------------------------------------------
     // Вторая матрица (случайное заполнение с выбором границ)
     std::srand(std::time(0) + 1); // Добавляем +1 для разного seed
-    
+
     int k, l;
     std::cout << "\nEnter number rows and cols for random matrix: ";
     std::cin >> k >> l;
@@ -126,7 +132,8 @@ int main() {
         for (int j = 1; j < l; j++) {
             if (b[i][j] == b[i][j - 1]) {
                 curr_lenrand++;
-            } else {
+            }
+            else {
                 if (curr_lenrand > max_lenrand) {
                     max_lenrand = curr_lenrand;
                     max_rowrand = i;
@@ -134,7 +141,7 @@ int main() {
                 curr_lenrand = 1;
             }
         }
-       
+
         if (curr_lenrand > max_lenrand) {
             max_lenrand = curr_lenrand;
             max_rowrand = i;
@@ -146,3 +153,7 @@ int main() {
 
     return 0;
 }
+
+    return 0;
+}
+

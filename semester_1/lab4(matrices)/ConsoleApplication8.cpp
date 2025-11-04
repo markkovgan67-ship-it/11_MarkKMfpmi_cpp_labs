@@ -34,20 +34,43 @@ int main() {
     }
     else if (choice == 2) {
         // Ручной ввод
-        
-         std::cout << "Enter number rows and cols: ";
-         std::cin >> n >> m;
+        std::cout << "Enter number rows and cols: ";
+        std::cin >> n >> m;
         std::cout << "Enter elements matrix: " << n << "x" << m << ":" << std::endl;
+        
+        // Ввод элементов
         for (int i = 0; i < n; i++)
             for (int j = 0; j < m; j++)
                 std::cin >> a[i][j];
+        
+        // Вывод матрицы в виде таблицы
+        std::cout << "Your matrix " << n << "x" << m << ":" << std::endl;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                std::cout << a[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
     }
     else {
         std::cout << "Invalid choice! Using manual input by default." << std::endl;
+        std::cout << "Enter number rows and cols: ";
+        std::cin >> n >> m;
         std::cout << "Enter elements matrix: " << n << "x" << m << ":" << std::endl;
+        
+        // Ввод элементов
         for (int i = 0; i < n; i++)
             for (int j = 0; j < m; j++)
                 std::cin >> a[i][j];
+        
+        // Вывод матрицы в виде таблицы
+        std::cout << "Your matrix " << n << "x" << m << ":" << std::endl;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                std::cout << a[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
     }
 
     // Подсчет столбцов без элемента a[0][0]
@@ -153,7 +176,3 @@ int main() {
 
     return 0;
 }
-
-    return 0;
-}
-

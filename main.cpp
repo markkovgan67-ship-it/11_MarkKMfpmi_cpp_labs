@@ -2,7 +2,7 @@
 using namespace std;
 
 int main() {
-    int a = 0, b = 0;  // Инициализировать!
+    int a = 0, b = 0;
 
     cout << "Введите начало отрезка (a): ";
     cin >> a;
@@ -11,10 +11,10 @@ int main() {
 
     cout << "Дружественные числа на отрезке [" << a << ", " << b << "]:" << endl;
 
-    bool found = false;  // Инициализировать!
+    bool found = false;  
 
     for (int i = a; i <= b; i++) {
-        int sum_i = 0;  // Инициализировать!
+        int sum_i = 0;
         for (int j = 1; j < i; j++) {
             if (i % j == 0) {
                 sum_i += j;
@@ -22,7 +22,7 @@ int main() {
         }
 
         if (sum_i > i && sum_i <= b) {
-            int sum_j = 0;  // Инициализировать!
+            int sum_j = 0;
             for (int k = 1; k < sum_i; k++) {
                 if (sum_i % k == 0) {
                     sum_j += k;
@@ -41,4 +41,5 @@ int main() {
     }
 
     return 0;
+
 }

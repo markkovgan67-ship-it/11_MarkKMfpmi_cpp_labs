@@ -10,34 +10,33 @@ int sumOfDivisors(int n) {
     return sum;
 }
 
-// =============== 6 САМЫХ ВАЖНЫХ ТЕСТОВ ===============
 
-// 1. БАЗОВАЯ ПРОВЕРКА функции sumOfDivisors
+
+
 TEST(BasicTest, SumOfDivisors) {
     EXPECT_EQ(sumOfDivisors(6), 6);     // 1+2+3 = 6 (совершенное число)
     EXPECT_EQ(sumOfDivisors(10), 8);    // 1+2+5 = 8
 }
 
-// 2. ГЛАВНЫЙ ТЕСТ: известная пара дружественных чисел
+
 TEST(MainTest, FriendlyPair220_284) {
     EXPECT_EQ(sumOfDivisors(220), 284); // 220 → 284
     EXPECT_EQ(sumOfDivisors(284), 220); // 284 → 220
 }
 
-// 3. ВТОРАЯ известная пара (для надежности)
+
 TEST(SecondPairTest, FriendlyPair1184_1210) {
     EXPECT_EQ(sumOfDivisors(1184), 1210);
     EXPECT_EQ(sumOfDivisors(1210), 1184);
 }
 
-// 4. ТЕСТ НА ОШИБКУ: проверяем что обычные числа не дружественные
+
 TEST(NegativeTest, NotFriendlyNumbers) {
     EXPECT_NE(sumOfDivisors(10), 10);   // 10 не совершенное
     EXPECT_NE(sumOfDivisors(100), 100); // 100 не совершенное
     EXPECT_FALSE(sumOfDivisors(50) == 60 && sumOfDivisors(60) == 50);
 }
 
-// 5. ТЕСТ ПОИСКА в диапазоне (имитация работы программы)
 TEST(RangeSearchTest, FindInRange200_300) {
     bool found = false;
     int found_i = 0, found_sum = 0;
@@ -59,7 +58,7 @@ TEST(RangeSearchTest, FindInRange200_300) {
     EXPECT_EQ(found_sum, 284);
 }
 
-// 6. ТЕСТ ПУСТОГО диапазона (граничный случай)
+
 TEST(EmptyRangeTest, NoFriendlyInRange1_100) {
     bool found = false;
 
@@ -73,5 +72,6 @@ TEST(EmptyRangeTest, NoFriendlyInRange1_100) {
         }
     }
 
-    EXPECT_FALSE(found); // Не должно найти ничего
+    EXPECT_FALSE(found);
+
 }

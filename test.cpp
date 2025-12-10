@@ -32,8 +32,8 @@ TEST(SecondPairTest, FriendlyPair1184_1210) {
 
 
 TEST(NegativeTest, NotFriendlyNumbers) {
-    EXPECT_NE(sumOfDivisors(10), 10);   // 10 не совершенное
-    EXPECT_NE(sumOfDivisors(100), 100); // 100 не совершенное
+    EXPECT_NE(sumOfDivisors(10), 10);  
+    EXPECT_NE(sumOfDivisors(100), 100); 
     EXPECT_FALSE(sumOfDivisors(50) == 60 && sumOfDivisors(60) == 50);
 }
 
@@ -75,4 +75,5 @@ TEST(EmptyRangeTest, NoFriendlyInRange1_100) {
     EXPECT_FALSE(found);
 
 }
+
 

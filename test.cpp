@@ -14,14 +14,14 @@ int sumOfDivisors(int n) {
 
 
 TEST(BasicTest, SumOfDivisors) {
-    EXPECT_EQ(sumOfDivisors(6), 6);     // 1+2+3 = 6 (совершенное число)
-    EXPECT_EQ(sumOfDivisors(10), 8);    // 1+2+5 = 8
+    EXPECT_EQ(sumOfDivisors(6), 6);     
+    EXPECT_EQ(sumOfDivisors(10), 8);    
 }
 
 
 TEST(MainTest, FriendlyPair220_284) {
-    EXPECT_EQ(sumOfDivisors(220), 284); // 220 → 284
-    EXPECT_EQ(sumOfDivisors(284), 220); // 284 → 220
+    EXPECT_EQ(sumOfDivisors(220), 284); 
+    EXPECT_EQ(sumOfDivisors(284), 220); 
 }
 
 
@@ -75,3 +75,4 @@ TEST(EmptyRangeTest, NoFriendlyInRange1_100) {
     EXPECT_FALSE(found);
 
 }
+

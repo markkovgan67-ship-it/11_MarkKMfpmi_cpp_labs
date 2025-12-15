@@ -1,15 +1,9 @@
-
+// pch.h
 #ifndef PCH_H
 #define PCH_H
 
-
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <cassert>
-
-
+// Только самое необходимое
 #include <gtest/gtest.h>
+#include <iostream>
 
-
-#endif 
+#endif

@@ -7,7 +7,7 @@ class ForwardList {
 
 private:
     struct Node {
-        int32_t value_;
+        int value_;  
         Node* next_;
 
         explicit Node(int value) : value_(value), next_(nullptr) {
@@ -19,28 +19,28 @@ public:
     public:
         using iterator_category = std::forward_iterator_tag;
         using difference_type = std::ptrdiff_t;
-        using value_type = int32_t;
+        using value_type = int; 
         using pointer = value_type*;
         using reference = value_type&;
 
         explicit ForwardListIterator(Node* position) : position_(position) {
         }
 
-        ForwardListIterator& operator++() {  // prefix
+        ForwardListIterator& operator++() { 
             if (position_ != nullptr) {
                 position_ = position_->next_;
             }
             return *this;
         }
 
-        ForwardListIterator operator++(int) {  // postfix
+        ForwardListIterator operator++(int) {  
             ForwardListIterator retval = *this;
             ++(*this);
             return retval;
         }
 
         bool operator==(const ForwardListIterator& other) const {
-            // your code goes here
+            return position_ == other.position_;
         }
 
         bool operator!=(const ForwardListIterator& other) const {
@@ -54,76 +54,107 @@ public:
         pointer operator->() {
             return &position_->value_;
         }
-        
+
     private:
         Node* position_;
     };
 
-    // methods for "ranged-based for loop"
-    // 1) non-const version
+    class ConstForwardListIterator {
+    public:
+        using iterator_category = std::forward_iterator_tag;
+        using difference_type = std::ptrdiff_t;
+        using value_type = int;  
+        using pointer = const value_type*;
+        using reference = const value_type&;
+
+        explicit ConstForwardListIterator(const Node* position) : position_(position) {
+        }
+
+        ConstForwardListIterator& operator++() {
+            if (position_ != nullptr) {
+                position_ = position_->next_;
+            }
+            return *this;
+        }
+
+        ConstForwardListIterator operator++(int) {
+            ConstForwardListIterator retval = *this;
+            ++(*this);
+            return retval;
+        }
+
+        bool operator==(const ConstForwardListIterator& other) const {
+            return position_ == other.position_;
+        }
+
+        bool operator!=(const ConstForwardListIterator& other) const {
+            return !(*this == other);
+        }
+
+        reference operator*() const {
+            return position_->value_;
+        }
+
+        pointer operator->() const {
+            return &position_->value_;
+        }
+
+    private:
+        const Node* position_;
+    };
+
     ForwardListIterator begin() {
-        // your code goes here
+        return ForwardListIterator(head_);
     }
+
     ForwardListIterator end() {
-        // your code goes here
+        return ForwardListIterator(nullptr);
     }
 
-    // 2) const version
-    // TODO: think about return type
-    // (is it exactly ForwardListIterator?)
-    ForwardListIterator begin() const {
-        // your code goes here
-    }
-    ForwardListIterator end() const {
-        // your code goes here
+    ConstForwardListIterator begin() const {
+        return ConstForwardListIterator(head_);
     }
 
-    // default constructor
+    ConstForwardListIterator end() const {
+        return ConstForwardListIterator(nullptr);
+    }
+
+
     ForwardList();
 
-    // copy constructor
     ForwardList(const ForwardList& rhs);
+    ForwardList(size_t count, int value);  
 
-    // Constructs a ForwardList with `count` copies of elements with value `value`.
-    ForwardList(size_t count, int32_t value);
+   
+    ForwardList(std::initializer_list<int> init);  
 
-    // Constructs a ForwardList with std::initializer_list<int32_t>
-    ForwardList(std::initializer_list<int32_t> init);
-
-    // operator= overloading
     ForwardList& operator=(const ForwardList& rhs);
 
-    // destructor
+   
     ~ForwardList();
 
-    // insert new element on the top of the list
-    void PushFront(int32_t value);
-
-    // delete first element of the list
+    
+    void PushFront(int value);  
     void PopFront();
+   
+    void Remove(int value);  
 
-    // remove every occurence of an element in the list
-    // whose value equals to param `value`,
-    // the remaining elements must remain in the same order
-    void Remove(int32_t value);
-
-    // erases all the elements
     void Clear();
 
-    // find list's element by the `value`
-    // returns true, if element exists
-    // otherwise, returns false
-    bool FindByValue(int32_t value);
-
-    // print list's elements to stream separated by space
+  
+    bool FindByValue(int value);
     void Print(std::ostream& out);
 
-    // get first element of the list
-    int32_t Front() const;
+    
+    int Front() const;  
 
-    // get size of the list
+  
     size_t Size() const;
 
+
+    bool IsEmpty() const;
+
 private:
-    // your code goes here
+    Node* head_;
+    size_t size_;
 };

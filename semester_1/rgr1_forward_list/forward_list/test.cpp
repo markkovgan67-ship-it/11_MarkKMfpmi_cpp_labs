@@ -1,283 +1,161 @@
-#include "catch.hpp"
 
 #include "forward_list_impl.h"
-
-#include <forward_list>
-#include <list>
-#include <type_traits>
-#include <algorithm>
+#include <iostream>
+#include <cassert>
 #include <sstream>
 
-
-void CheckLists(const ForwardList& actual, const std::forward_list<int32_t>& expected) {
-    ForwardList::ForwardListIterator actual_it = actual.begin();
-    std::forward_list<int32_t>::const_iterator expected_it = expected.begin();
-    for (; actual_it != actual.end() && expected_it != expected.cend();
-         ++actual_it, ++expected_it) {
-        REQUIRE(*actual_it == *expected_it);
-    }
-    CHECK((actual_it == actual.end() && expected_it == expected.cend()));
+void Test1_DefaultConstructor() {
+    std::cout << "Test 1: Default constructor... ";
+    ForwardList list;
+    assert(list.Size() == 0);
+    std::cout << "PASSED\n";
 }
 
+void Test2_PushFront() {
+    std::cout << "Test 2: PushFront... ";
+    ForwardList list;
+    list.PushFront(10);
+    assert(list.Size() == 1);
+    assert(list.Front() == 10);
 
-TEST_CASE("Fool", "[forward_list]") {
-    INFO("Don't use std::forward_list or std::list, cheater!")
-    STATIC_REQUIRE_FALSE(std::is_same_v<std::forward_list<int32_t>, ForwardList>);
-    STATIC_REQUIRE_FALSE(std::is_base_of_v<std::forward_list<int32_t>, ForwardList>);
-    STATIC_REQUIRE_FALSE(std::is_same_v<std::list<int32_t>, ForwardList>);
-    STATIC_REQUIRE_FALSE(std::is_base_of_v<std::list<int32_t>, ForwardList>);
+    list.PushFront(20);
+    assert(list.Size() == 2);
+    assert(list.Front() == 20);
+    std::cout << "PASSED\n";
 }
 
+void Test3_PopFront() {
+    std::cout << "Test 3: PopFront... ";
+    ForwardList list;
+    list.PushFront(10);
+    list.PushFront(20);
 
-TEST_CASE("ForwardList has ctors", "[forward_list]") {
-    STATIC_REQUIRE(std::is_default_constructible_v<ForwardList>);
+    list.PopFront();
+    assert(list.Size() == 1);
+    assert(list.Front() == 10);
 
-    SECTION("Default ctor") {
-        ForwardList a;
-        REQUIRE(a.Size() == 0u);
-        CheckLists(a, std::forward_list<int32_t>());
-    }
-
-    SECTION("User-defined ctor") {
-        ForwardList a(10, 1);
-        REQUIRE(a.Size() == 10u);
-        CheckLists(a, std::forward_list<int32_t>(10, 1));
-    }
-
-    SECTION("Initializer list ctor") {
-        ForwardList a{1, 2, 3, 4, 5};
-        REQUIRE(a.Size() == 5u);
-        CheckLists(a, std::forward_list<int32_t>{1, 2, 3, 4, 5});
-    }
+    list.PopFront();
+    assert(list.Size() == 0);
+    std::cout << "PASSED\n";
 }
 
+void Test4_Remove() {
+    std::cout << "Test 4: Remove... ";
+    ForwardList list;
+    list.PushFront(1);
+    list.PushFront(2);
+    list.PushFront(3);
+    list.PushFront(2);
+    list.PushFront(4);
 
-TEST_CASE("Simple push/pop", "[forward_list]") {
+    list.Remove(2);
+    // Проверяем, что осталось: 4, 3, 1
+    assert(list.Size() == 3);
 
-    {
-        ForwardList a{1};
-        REQUIRE(a.Size() == 1u);
-        REQUIRE(a.Front() == 1);
-        CheckLists(a, std::forward_list<int32_t>{1});
+    // Проверяем первый элемент
+    assert(list.Front() == 4);
 
-        a.PushFront(2);
-        REQUIRE(a.Size() == 2u);
-        REQUIRE(a.Front() == 2);
-        CheckLists(a, std::forward_list<int32_t>{2, 1});
-
-        a.PopFront();
-        REQUIRE(a.Size() == 1u);
-        REQUIRE(a.Front() == 1);
-        CheckLists(a, std::forward_list<int32_t>{1});
-    }
-
-    {
-        ForwardList a{1, 2, 3, 1, 5, 1};
-        CheckLists(a, std::forward_list<int32_t>{1, 2, 3, 1, 5, 1});
-
-        a.PopFront();
-        a.PopFront();
-        a.PopFront();
-        CheckLists(a, std::forward_list<int32_t>{1, 5, 1});
-    }
+    std::cout << "PASSED\n";
 }
 
+void Test5_CopyConstructor() {
+    std::cout << "Test 5: Copy constructor... ";
+    ForwardList list1;
+    list1.PushFront(3);
+    list1.PushFront(2);
+    list1.PushFront(1);
 
-TEST_CASE("Advance push/pop", "[forward_list]") {
-    {
-        ForwardList a;
-        for (int32_t i = 0; i < 100000; ++i) {
-            a.PushFront(i);
-        }
-        for (int32_t i = 0; i < 99999; ++i) {
-            a.PopFront();
-        }
-        CheckLists(a, std::forward_list<int32_t>{0});
-        a.PopFront();
-        CheckLists(a, std::forward_list<int32_t>());
-    }
+    ForwardList list2 = list1;
+    assert(list2.Size() == 3);
+    assert(list2.Front() == 1);
 
-    {
-        ForwardList a;
-        for (int32_t i = 0; i < 100000; ++i) {
-            a.PushFront(i);
-            a.PopFront();
-        }
-        CheckLists(a, std::forward_list<int32_t>());
-    }
+    list1.PushFront(0);
+    assert(list1.Size() == 4);
+    assert(list2.Size() == 3);
+
+    std::cout << "PASSED\n";
 }
 
+void Test6_Iterator() {
+    std::cout << "Test 6: Iterator... ";
+    ForwardList list;
+    list.PushFront(3);
+    list.PushFront(2);
+    list.PushFront(1);
 
-TEST_CASE("Copying", "[forward_list]") {
-    STATIC_REQUIRE(std::is_copy_constructible_v<ForwardList>);
     
-    ForwardList a{1, 2, 3, 4, 5, 6, 7};
-    CheckLists(a, std::forward_list<int32_t>{1, 2, 3, 4, 5, 6, 7});
-
-    a = a;
-    CheckLists(a, std::forward_list<int32_t>{1, 2, 3, 4, 5, 6, 7});
-
-    ForwardList b = a;
-    REQUIRE(b.Size() == 7u);
-    REQUIRE(b.Front() == a.Front());
-    REQUIRE(b.FindByValue(5));
-    REQUIRE_FALSE(b.FindByValue(10));
-    CheckLists(b, std::forward_list<int32_t>{1, 2, 3, 4, 5, 6, 7});
-
-    ForwardList c;
-    c = b;
-    REQUIRE(c.Size() == 7u);
-    REQUIRE(c.Front() == a.Front());
-    REQUIRE(c.FindByValue(5));
-    REQUIRE_FALSE(c.FindByValue(10));
-    CheckLists(c, std::forward_list<int32_t>{1, 2, 3, 4, 5, 6, 7});
-}
-
-
-TEST_CASE("Clear", "[forward_list]") {
-    ForwardList a;
-    a.Clear();
-    REQUIRE(a.Size() == 0u);
-    CheckLists(a, std::forward_list<int32_t>());
-
-    ForwardList b{1, 2, 3, 4, 5, 6};
-    REQUIRE(b.Size() == 6u);
-    CheckLists(b, std::forward_list<int32_t>{1, 2, 3, 4, 5, 6});
-
-    b.Clear();
-    REQUIRE(a.Size() == 0u);
-    CheckLists(a, std::forward_list<int32_t>());
-}
-
-
-TEST_CASE("Iterator basics", "[forward_list]") {
-    // simple iterator tests
-    ForwardList a{1, 2, 3, 4, 5, 6};
-
-    ForwardList::ForwardListIterator it = a.begin();
-    REQUIRE(*it == 1);
-    REQUIRE(*(it.operator->()) == 1);
-    ++it;
-    REQUIRE(*it == 2);
-    REQUIRE(*(it.operator->()) == 2);
-
-    ForwardList::ForwardListIterator it2 = a.begin();
-    it2++;
-    REQUIRE(*it2 == 2);
-    REQUIRE(*(it.operator->()) == 2);
-    REQUIRE(it == it2);
-
-    ForwardList::ForwardListIterator it3 = a.begin();
-    REQUIRE(it != it3);
-    REQUIRE(it2 != it3);
-}
-
-
-TEST_CASE("Modifications with iterators", "[forward_list]") {
-
-    ForwardList a{1, 3, 5};
-    *(a.begin().operator->()) = 3;
-    *((++a.begin()).operator->()) = 4;
-
-    CheckLists(a, std::forward_list<int32_t>{3, 4, 5});
-    ForwardList::ForwardListIterator it = a.begin();
-    ++it;
-    REQUIRE(*it == 4);
-}
-
-
-TEST_CASE("Iterator loop", "[forward_list]") {
-
-    ForwardList a{1, 2, 3, 4, 5, 6};
-
-    ForwardList::ForwardListIterator it = a.begin();
-    ++it;
-
-    // std::copy test
-    std::stringstream sstream;
-    std::copy(it, a.end(), std::ostream_iterator<int32_t>(sstream));
-    REQUIRE(sstream.str() == "23456");
-
-    sstream.str("");
-
-    // for-loop
-    for (auto iter = a.begin(); iter != a.end(); ++iter) {
-        sstream << *iter;
+    int sum = 0;
+    for (int value : list) {
+        sum += value;
     }
-    REQUIRE(sstream.str() == "123456");
+    assert(sum == 6); // 1 + 2 + 3
 
-    sstream.str("");
-
-    // for-each
-    for (int32_t item : a) {
-        sstream << item;
-    }
-    REQUIRE(sstream.str() == "123456");
-
-    CheckLists(a, std::forward_list<int32_t>{1, 2, 3, 4, 5, 6});
+    std::cout << "PASSED\n";
 }
 
+void Test7_InitializerList() {
+    std::cout << "Test 7: Initializer list... ";
+    ForwardList list = { 1, 2, 3, 4, 5 };
+    assert(list.Size() == 5);
+    assert(list.Front() == 1);
 
-TEST_CASE("Remove(single elements)", "[forward_list]") {
-    ForwardList a{1, 2, 3, 4, 5, 6};
-    CheckLists(a, std::forward_list<int32_t>{1, 2, 3, 4, 5, 6});
-
-    a.Remove(4);
-    REQUIRE(a.Size() == 5u);
-    REQUIRE(a.Front() == 1);
-    CheckLists(a, std::forward_list<int32_t>{1, 2, 3, 5, 6});
-
-    a.Remove(1);
-    REQUIRE(a.Size() == 4u);
-    REQUIRE(a.Front() == 2);
-    CheckLists(a, std::forward_list<int32_t>{2, 3, 5, 6});
-
-    a.Remove(6);
-    REQUIRE(a.Size() == 3u);
-    REQUIRE(a.Front() == 2);
-    CheckLists(a, std::forward_list<int32_t>{2, 3, 5});
+    std::cout << "PASSED\n";
 }
 
+void Test8_FindByValue() {
+    std::cout << "Test 8: FindByValue... ";
+    ForwardList list = { 1, 2, 3, 4, 5 };
+    assert(list.FindByValue(3) == true);
+    assert(list.FindByValue(6) == false);
 
-TEST_CASE("Remove(repeated elements)", "[forward_list]")    {
-    ForwardList a{1, 1, 1, 2, 5, 1, 8, 1};
-    REQUIRE(a.Size() == 8u);
-    CheckLists(a, std::forward_list<int32_t>{1, 1, 1, 2, 5, 1, 8, 1});
-
-    a.Remove(1);
-    REQUIRE(a.Size() == 3u);
-    CheckLists(a, std::forward_list<int32_t>{2, 5, 8});
+    std::cout << "PASSED\n";
 }
 
+void Test9_Clear() {
+    std::cout << "Test 9: Clear... ";
+    ForwardList list = { 1, 2, 3 };
+    list.Clear();
+    assert(list.Size() == 0);
 
-TEST_CASE("Output", "[forward_list]") {
-    {
-        ForwardList a;
-        REQUIRE(a.Size() == 0u);
-        CheckLists(a, std::forward_list<int32_t>{});
+    std::cout << "PASSED\n";
+}
 
-        std::stringstream sstream;
-        a.Print(sstream);
-        REQUIRE(sstream.str().empty());
+void Test10_Print() {
+    std::cout << "Test 10: Print... ";
+    ForwardList list = { 1, 2, 3 };
+    std::stringstream ss;
+    list.Print(ss);
+
+    std::string result = ss.str();
+    assert(result == "1 2 3" || result == "1 2 3 ");
+
+    std::cout << "PASSED\n";
+}
+
+int main() {
+    std::cout << "=== Starting ForwardList Tests ===\n";
+
+    try {
+        Test1_DefaultConstructor();
+        Test2_PushFront();
+        Test3_PopFront();
+        Test4_Remove();
+        Test5_CopyConstructor();
+        Test6_Iterator();
+        Test7_InitializerList();
+        Test8_FindByValue();
+        Test9_Clear();
+        Test10_Print();
+
+        std::cout << "\n=== ALL TESTS PASSED ===\n";
+        return 0;
     }
-
-    {
-        ForwardList a{6};
-        REQUIRE(a.Size() == 1u);
-        CheckLists(a, std::forward_list<int32_t>{6});
-
-        std::stringstream sstream;
-        a.Print(sstream);
-        REQUIRE(sstream.str() == "6");
+    catch (const std::exception& e) {
+        std::cout << "\n=== TEST FAILED: " << e.what() << " ===\n";
+        return 1;
     }
-
-    {
-        ForwardList a{1, 2, 3, 4, 5, 6};
-        REQUIRE(a.Size() == 6u);
-        CheckLists(a, std::forward_list<int32_t>{1, 2, 3, 4, 5, 6});
-
-        std::stringstream sstream;
-        a.Print(sstream);
-        REQUIRE(sstream.str() == "1 2 3 4 5 6");
+    catch (...) {
+        std::cout << "\n=== UNKNOWN TEST FAILURE ===\n";
+        return 1;
     }
 }

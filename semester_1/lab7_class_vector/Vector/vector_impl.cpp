@@ -1,6 +1,7 @@
-﻿#include "vector_impl.h"
+#include "vector_impl.h"
 #include <iostream>
 #include <algorithm>
+#include <stdexcept>
 
 Vector::Vector(size_t size) : size_(size), capacity_(size) {
     if (size > 0) {
@@ -26,23 +27,29 @@ Vector::Vector(const Vector& other) :
         for (size_t i = 0; i < size_; ++i) {
             data_[i] = other.data_[i];
         }
+    } else {
+        data_ = nullptr;
     }
 }
 
 Vector& Vector::operator=(const Vector& other) {
     if (this != &other) {
-        delete[] data_;
-        size_ = other.size_;
-        capacity_ = other.capacity_;
-        if (capacity_ > 0) {
-            data_ = new int[capacity_];
-            for (size_t i = 0; i < size_; ++i) {
-                data_[i] = other.data_[i];
+        // Создаем временную копию
+        int* new_data = nullptr;
+        if (other.capacity_ > 0) {
+            new_data = new int[other.capacity_];
+            for (size_t i = 0; i < other.size_; ++i) {
+                new_data[i] = other.data_[i];
             }
         }
-        else {
-            data_ = nullptr;
-        }
+        
+        // Удаляем старые данные
+        delete[] data_;
+        
+        // Присваиваем новые значения
+        data_ = new_data;
+        size_ = other.size_;
+        capacity_ = other.capacity_;
     }
     return *this;
 }
@@ -58,10 +65,14 @@ void Vector::Swap(Vector& other) {
 }
 
 int& Vector::operator[](size_t index) {
+    // Для безопасности можно добавить проверку
+    // if (index >= size_) throw std::out_of_range("Index out of range");
     return data_[index];
 }
 
 const int& Vector::operator[](size_t index) const {
+    // Для безопасности можно добавить проверку
+    // if (index >= size_) throw std::out_of_range("Index out of range");
     return data_[index];
 }
 

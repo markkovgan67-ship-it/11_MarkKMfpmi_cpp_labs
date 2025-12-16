@@ -1,8 +1,10 @@
-﻿#ifndef VECTOR_IMPL_H
+#ifndef VECTOR_IMPL_H
 #define VECTOR_IMPL_H
 
 #include <cstddef>
 #include <stdexcept>
+#include <iostream>
+#include <initializer_list>
 
 class Vector {
 private:

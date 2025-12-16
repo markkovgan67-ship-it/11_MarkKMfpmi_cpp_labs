@@ -66,13 +66,13 @@ void Vector::Swap(Vector& other) {
 
 int& Vector::operator[](size_t index) {
    
-    // if (index >= size_) throw std::out_of_range("Index out of range");
+   
     return data_[index];
 }
 
 const int& Vector::operator[](size_t index) const {
     
-    // if (index >= size_) throw std::out_of_range("Index out of range");
+   
     return data_[index];
 }
 
@@ -145,4 +145,5 @@ std::ostream& operator<<(std::ostream& os, const Vector& vec) {
     os << ']';
     return os;
 }
+
 

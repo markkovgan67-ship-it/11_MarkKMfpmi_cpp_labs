@@ -43,10 +43,10 @@ Vector& Vector::operator=(const Vector& other) {
             }
         }
         
-        // Удаляем старые данные
+       
         delete[] data_;
         
-        // Присваиваем новые значения
+       
         data_ = new_data;
         size_ = other.size_;
         capacity_ = other.capacity_;
@@ -65,13 +65,13 @@ void Vector::Swap(Vector& other) {
 }
 
 int& Vector::operator[](size_t index) {
-    // Для безопасности можно добавить проверку
+   
     // if (index >= size_) throw std::out_of_range("Index out of range");
     return data_[index];
 }
 
 const int& Vector::operator[](size_t index) const {
-    // Для безопасности можно добавить проверку
+    
     // if (index >= size_) throw std::out_of_range("Index out of range");
     return data_[index];
 }
@@ -145,3 +145,4 @@ std::ostream& operator<<(std::ostream& os, const Vector& vec) {
     os << ']';
     return os;
 }
+
